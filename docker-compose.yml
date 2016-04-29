@@ -1,0 +1,13 @@
+node:
+  build: .
+  command: npm start
+  environment:
+    NODE_ENV: development
+    APP_PORT: 10590
+  ports:
+    - "14590:10590"
+  volumes:
+    - ./config:/var/www/config
+    - ./src:/var/www/src
+    - ./index.js:/var/www/index.js
+    - ./package.json:/var/www/package.json

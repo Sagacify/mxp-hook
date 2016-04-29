@@ -1,0 +1,24 @@
+{
+  "transitions": {
+    "START_PROGRESS": {
+      "jiraTag": "Start progress",
+      "comment": "Work is in progress on our side"
+    },
+    "CODE_REVIEW": {
+      "jiraTag": "Code Review Required",
+      "comment": "We are reviewing the code",
+      "fields": [
+        "customfield_11900",
+        "customfield_10738"
+      ]
+    },
+    "CODE_REVIEW_OK": {
+      "jiraTag": "Code review OK",
+      "comment": "Our code review is successful"
+    },
+    "PRE_RELEASE_AVAILABLE": {
+      "jiraTag": "Pre-release Available",
+      "comment": "Issue is ready for Pre-release"
+    }
+  }
+}

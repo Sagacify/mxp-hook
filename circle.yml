@@ -1,0 +1,26 @@
+machine:
+  environment:
+    COMPOSE_PROJECT_NAME: mxphook
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - sudo pip install -U docker-compose==1.5.0
+    - docker-compose --version
+    - docker-compose pull
+    - docker-compose build node
+
+test:
+  override:
+    - docker-compose run node npm test
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - echo "{\"https://index.docker.io/v1/\":{\"auth\":\"<AUTH>\",\"email\":\"<EMAIL>\"}}" | sed "s/<EMAIL>/$HUB_EMAIL/;s/<AUTH>/$HUB_AUTH/" > ~/.dockercfg
+      - docker tag mxphook_node sagacify/$CIRCLE_PROJECT_REPONAME:v$CIRCLE_BUILD_NUM
+      - docker tag sagacify/$CIRCLE_PROJECT_REPONAME:v$CIRCLE_BUILD_NUM sagacify/$CIRCLE_PROJECT_REPONAME:$latest
+      - docker push sagacify/$CIRCLE_PROJECT_REPONAME

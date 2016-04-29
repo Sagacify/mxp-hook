@@ -1,0 +1,10 @@
+{
+  "messages": {
+    "CODE_REVIEW": {
+      "message": "Please review the code"
+    },
+    "TEST_SAGA": {
+      "message": "Please test the app"
+    }
+  }
+}
