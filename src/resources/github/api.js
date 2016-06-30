@@ -22,7 +22,7 @@ var getMasterHeadSha = function () {
 
     request(options).then(function (response) {
       if (response.status !== 200) {
-        reject(response.statusText);
+        reject(new Error(response.statusText));
       }
 
       var result = _.find(response.data, { 'ref': 'refs/heads/master' });
@@ -30,7 +30,7 @@ var getMasterHeadSha = function () {
       if (!result) {
         log.error('get-master-head-sha-failed', response);
 
-        return reject('That repo doesn\'t have a master branch');
+        return reject(new Error('That repo doesn\'t have a master branch'));
       }
 
       log.info('get-master-head-sha', response.data);
@@ -42,7 +42,7 @@ var getMasterHeadSha = function () {
     }).catch(function (error) {
       log.error('get-master-head-sha-failed', error);
 
-      reject(error.status + ' : ' + error.statusText);
+      reject(new Error(error.status + ' : ' + error.statusText));
     });
   });
 };
@@ -65,7 +65,7 @@ var createBranch = function (sha, issueKey) {
 
     request(options).then(function (response) {
       if (response.status !== 201) {
-        reject(response.statusText);
+        reject(new Error(response.statusText));
       }
 
       log.info('create-branch', response.data, { sha: sha, issueKey: issueKey });

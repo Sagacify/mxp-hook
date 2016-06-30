@@ -17,7 +17,7 @@ var handleWebhook = function (body, params) {
     if (!statusChange) {
       log.error('webhook-no-status-change', body);
 
-      return reject('This is not a status change');
+      return reject(new Error('This is not a status change'));
     }
 
     var issue = params[0].split('/')[1];
@@ -31,7 +31,7 @@ var handleWebhook = function (body, params) {
         return githubApi.getMasterHeadSha()
           .then(function (result) {
             if (!result.success) {
-              return reject('Sha is invalid');
+              return reject(new Error('Sha is invalid'));
             }
 
             return githubApi.createBranch(result.sha, issue)

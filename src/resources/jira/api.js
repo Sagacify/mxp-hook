@@ -32,7 +32,7 @@ var getTransitionId = function (issueId, statusName) {
 
     return request(options).then(function (response) {
       if (response.status !== 200) {
-        reject(response.statusText);
+        reject(new Error(response.statusText));
       }
 
       var result = _.find(response.data.transitions, { 'name': transition.jiraTag });
@@ -40,7 +40,7 @@ var getTransitionId = function (issueId, statusName) {
       if (!result) {
         log.error('get-transaction-id-failed', response, options);
 
-        reject('That status doesn\'t exists in this context');
+        reject(new Error('That status doesn\'t exists in this context'));
       }
 
       log.info('post-transaction-succeed', response.data, options);
@@ -53,12 +53,12 @@ var getTransitionId = function (issueId, statusName) {
     }).catch(function (error) {
       log.error('get-transaction-id-failed', error, options);
 
-      reject(error.data.errorMessages[0]);
+      reject(new Error(error.data.errorMessages[0]));
     });
   });
 };
 
-var postTransition = function (issueId, transitionId, comment) {
+var postTransition = function (issueId, transitionId, transition) {
   return new Promise(function (resolve, reject) {
     var options = {
       method: 'post',
@@ -74,7 +74,7 @@ var postTransition = function (issueId, transitionId, comment) {
           comment: [
             {
               add: {
-                body: comment
+                body: transition.comment
               }
             }
           ]
@@ -90,9 +90,19 @@ var postTransition = function (issueId, transitionId, comment) {
       json: true
     };
 
+    if (transition.fields) {
+      transition.fields.forEach(function (field) {
+        options.data.update[field] = [
+          {
+            set: 'true'
+          }
+        ];
+      });
+    }
+
     return request(options).then(function (response) {
       if (response.status !== 204) {
-        reject(response.statusText);
+        reject(new Error(response.statusText));
       }
 
       log.info('post-transaction-succeed', response, options);
@@ -101,7 +111,7 @@ var postTransition = function (issueId, transitionId, comment) {
       });
     }).catch(function (error) {
       log.error('post-transaction-failed', error, options);
-      reject(error.data.errorMessages[0]);
+      reject(new Error(error.data.errorMessages[0]));
     });
   });
 };
@@ -109,7 +119,7 @@ var postTransition = function (issueId, transitionId, comment) {
 var applyTransition = function (issueId, statusName) {
   return getTransitionId(issueId, statusName)
     .then(function (result) {
-      return postTransition(issueId, result.id, result.transition.comment);
+      return postTransition(issueId, result.id, result.transition);
     });
 };
 

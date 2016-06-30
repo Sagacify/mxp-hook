@@ -21,12 +21,12 @@ var postMessage = function (messageId) {
 
     request(options).then(function (response) {
       if (response.status !== 200) {
-        reject(response.statusText);
+        reject(new Error(response.statusText));
       }
 
       resolve(response.status + ' : ' + response.statusText);
     }).catch(function (error) {
-      reject(error.status + ' : ' + error.statusText);
+      reject(new Error(error.status + ' : ' + error.statusText));
     });
   });
 };
