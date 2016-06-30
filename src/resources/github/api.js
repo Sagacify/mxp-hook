@@ -76,7 +76,9 @@ var createBranch = function (sha, issueKey) {
     }).catch(function (error) {
       log.info('create-branch-failed', error, { sha: sha, issueKey: issueKey });
 
-      reject(error.status + ' : ' + error.statusText);
+      resolve({
+        success: false
+      });
     });
   });
 };

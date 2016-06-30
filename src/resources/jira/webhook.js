@@ -34,7 +34,8 @@ var handleWebhook = function (body, params) {
               return reject('Sha is invalid');
             }
 
-            return githubApi.createBranch(result.sha, issue);
+            return githubApi.createBranch(result.sha, issue)
+              .then(resolve);
           });
       default:
         log.error('invalid-action', {}, body);
