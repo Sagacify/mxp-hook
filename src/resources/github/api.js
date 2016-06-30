@@ -30,7 +30,7 @@ var getMasterHeadSha = function () {
       if (!result) {
         log.error('get-master-head-sha-failed', response);
 
-        reject('That repo doesn\'t have a master branch');
+        return reject('That repo doesn\'t have a master branch');
       }
 
       log.info('get-master-head-sha', response.data);
