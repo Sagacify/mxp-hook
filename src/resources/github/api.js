@@ -12,7 +12,7 @@ var getMasterHeadSha = function () {
   return new Promise(function (resolve, reject) {
     var options = {
       method: 'GET',
-      url: 'https://api.github.com/repos/Sagacify/mxp-app/git/refs/heads',
+      url: 'https://api.github.com/repos/Sagacify/mxp-xamarin/git/refs/heads',
       headers: {
         Authorization: 'token ' + config.github.api.token,
         Accept: 'application/json'
@@ -51,7 +51,7 @@ var createBranch = function (sha, issueKey) {
   return new Promise(function (resolve, reject) {
     var options = {
       method: 'POST',
-      url: 'https://api.github.com/repos/Sagacify/mxp-app/git/refs',
+      url: 'https://api.github.com/repos/Sagacify/mxp-xamarin/git/refs',
       data: {
         ref: 'refs/heads/' + issueKey,
         sha: sha
